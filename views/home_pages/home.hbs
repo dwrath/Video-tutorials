@@ -1,0 +1,53 @@
+
+      <main> 
+        <div class="container">
+
+
+          <!-- User Menu Bar -->
+             {{>menu_bar}}
+
+            {{#if msg}}  
+            <div class="text-center mt-3"><h2> {{msg}} </h2></div>  
+            {{/if}}
+
+            <div class="container mt-3  "> <!--container-->
+              <div class="row justify-content-center"> <!--row-->
+                <div class="row d-flex justify-content-between ml-7 mr-7"> <!-- row d-flex-->
+
+          {{#if courses.length}} 
+          {{#each courses}}
+
+                    <div class="card m-2 p-0 mb-5 coursebox "> <!--card-->
+                      <img
+                        class="card-img-top course-img-icon"
+                        src="{{this.imageUrl}}"
+                        alt="Course image"
+                        width="400px"
+                      />
+                    <div class="card-body ">
+                      <h4 class="card-title coursebox-title">{{this.title}} </h4>
+                    </div>
+                      <div class="card-footer d-inline-flex align-items-center justify-content-between">
+                            <a href="/courses/details/{{this._id}} "><button type="button" class="btn btn-info details bottom-5">Details</button></a>
+                              <div class="col text-right">
+                                <small>{{this.createdAt}} </small>
+                            
+                                
+                              </div>
+                      </div>
+                    </div> <!--card-->
+                
+          {{/each}}
+          
+          {{else}}
+                </div> <!-- row d-flex-->
+              </div> <!--row-->
+            </div> <!--container-->
+
+            <h3 class="text-center  ">No courses...</h4>
+          {{/if}}
+      </main>
+    </div> <!--container-->
+
+      
+      

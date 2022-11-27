@@ -1,0 +1,143 @@
+
+
+<body>
+  
+<div class="container">
+
+  <main>
+    <form class="text-center border border-light p-5"  action="/courses" method="POST">
+      <h1>Create Course</h1>
+      <div class="form-group h6">
+        <label for="title">Course Title</label>
+        <input
+          id="title"
+          type="text"
+          class="form-control"
+          placeholder="Course name"
+          name="title"
+          value=""
+        />
+        <small class="title error"></small>
+
+      </div>
+      <div class="form-group h6">
+        <label for="description">Course Description</label>
+        <textarea
+          id="description"
+          class="form-control"
+          placeholder="Description"
+          name="description"
+        ></textarea>
+        <small class="description error"></small>
+      </div>
+
+      <div class="form-group h6">
+        <label for="imageUrl">Image url</label>
+        <input
+          id="imageUrl"
+          type="text"
+          class="form-control"
+          placeholder="Image Url"
+          name="image_Url"
+          value=""
+        />
+        <small class="image_Url error"></small>
+      </div>
+
+      <div class="form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="check-box"
+          name="isPublic"
+        />
+        <label class="form-check-label" for="check-box">Public</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p hidden data-userId=" {{userId}}" id="userId"></p>
+  </main>
+</div>
+
+  
+
+<script>
+  const form = document.querySelector("form");
+  const titleError = document.querySelector(".title.error");
+  const descriptionError = document.querySelector(".description.error");
+  const imageUrlError = document.querySelector(".image_Url.error");
+  const author = document.getElementById('userId').getAttribute('data-userId'); 
+  const titleInput = document.querySelector("#title");
+  const descriptionInput = document.querySelector("#description");
+  const imageUrlInput = document.querySelector("#imageUrl");
+  
+
+
+  form.addEventListener("submit", async (e) => {
+    console.log("SUBMIT BTN CLICKED");
+    e.preventDefault();
+
+    // reset errors
+    titleError.textContent = "";
+    descriptionError.textContent = "";
+    imageUrlError.textContent = "";
+
+    // get values
+    const title = form.title.value;
+    const description = form.description.value;
+    const imageUrl = form.image_Url.value;
+    const isPublic = form.isPublic.checked;
+
+    //Modify the createdAt timestamp.
+    let createdAt;
+    createdAt = new Date().toString();
+    createdAt = createdAt.split(' ').slice(0,4).join(' ')
+
+    try {
+      const res = await fetch("create", {
+        method: "POST",
+        body: JSON.stringify({ title, description, imageUrl, createdAt, isPublic, author }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (data.errors) {
+        titleError.textContent = data.errors.title;
+        if (titleError.textContent) {
+          titleError.style.color = "red";
+          titleInput.classList.add("is-invalid");
+        } else {
+          titleInput.classList.remove("is-invalid");
+          titleInput.classList.add("is-valid");
+        }
+
+        descriptionError.textContent = data.errors.description;
+        if (descriptionError.textContent) {
+          descriptionError.style.color = "red";
+          descriptionInput.classList.add("is-invalid");
+        } else {
+          descriptionInput.classList.remove("is-invalid");
+          descriptionInput.classList.add("is-valid");
+        }
+
+        imageUrlError.textContent = data.errors.imageUrl;
+        if (imageUrlError.textContent) {
+          imageUrlError.style.color = "red";
+          imageUrlInput.classList.add("is-invalid");
+        } else {
+          imageUrlInput.classList.remove("is-invalid");
+          imageUrlInput.classList.add("is-valid");
+        }
+      }
+
+
+      if (data.status) {
+        location.assign("/");
+      }
+    }catch (err) {
+      console.log(err);
+    }
+  });
+</script>
+
+</body>

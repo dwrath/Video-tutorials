@@ -1,0 +1,32 @@
+<br />
+<h1 class="text-center display-4">
+  {{#if myCourses}}
+    My courses
+  {{else}}
+    Courses
+
+  {{/if}}
+
+</h1>
+
+{{#unless myCourses}}
+  <section>
+    <nav class="navbar justify-content-between pl-0 pr-0">
+      <a href="courses/create" class="btn btn-warning my-2 my-sm-0">Create Course</a>
+      <form class="search form-inline m-0" action="/courses" method="GET">
+        <input
+          class="form-control mr-sm-4"
+          name="search"
+          type="text"
+          placeholder="Find a product"
+          aria-label="Search"
+          id="search-input"
+        />
+        <button type="submit" class="search-button">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </nav>
+  </section>
+
+{{/unless}}

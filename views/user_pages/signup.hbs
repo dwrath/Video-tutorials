@@ -1,0 +1,90 @@
+<main>
+
+  <div class="container-sm mt-5">
+    <form
+      class="text-center border border-light p-5 rounded signup-form"
+      action="/signup"
+      method="POST"
+    >
+
+      <p class="h4">MEMBER SIGN-UP</p>
+
+      <div class="form-group h6">
+
+        <input
+          id="username"
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          name="username"
+          value=""
+        />
+        <small class="username error"></small>
+      </div>
+      <div class="form-group h6">
+
+        <input
+          id="password"
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          name="password"
+          value=""
+        />
+        <small class="password error"></small>
+      </div>
+
+      <div class="form-group repeatPassword h6">
+        <!-- <label for="repeatPassword">Repeat Password</label> -->
+        <input
+          id="repeatPassword"
+          type="password"
+          class="form-control"
+          placeholder="Repeat-Password"
+          name="repeatPassword"
+          value=""
+        />
+        <small class="repeatPassword error"></small>
+      </div>
+
+      <button type="submit" class="btn btn-primary mb-5">Register</button>
+      <p class="text-center">Already have an account
+        <a href="/login" class="link"> Login Here</a>
+      </p>
+    </form>
+  </div>
+</main>
+
+<!-- JAVASCRIPT -->
+<script>
+  const form = document.querySelector("form"); const usernameError =
+  document.querySelector(".username.error"); const passwordError =
+  document.querySelector(".password.error"); const repeatPasswordError =
+  document.querySelector(".repeatPassword.error"); const usernameInput =
+  document.querySelector("#username"); const passwordInput =
+  document.querySelector("#password"); const repeatPasswordInput =
+  document.querySelector("#repeatPassword"); form.addEventListener("submit",
+  async (e) => { e.preventDefault(); // reset errors usernameError.textContent =
+  ""; passwordError.textContent = ""; repeatPasswordError.textContent = ""; //
+  get values const username = form.username.value; const password =
+  form.password.value; const repeatPassword = form.repeatPassword.value; try {
+  const res = await fetch("/signup", { method: "POST", body: JSON.stringify({
+  username, password, repeatPassword }), headers: { "Content-Type":
+  "application/json" }, }); const data = await res.json(); if (data.errors) {
+  usernameError.textContent = data.errors.username; if
+  (usernameError.textContent) { usernameError.style.color = "red";
+  usernameInput.classList.add("is-invalid"); } else {
+  usernameInput.classList.remove("is-invalid");
+  usernameInput.classList.add("is-valid"); } passwordError.textContent =
+  data.errors.password; if (passwordError.textContent) {
+  passwordError.style.color = "red"; passwordInput.classList.add("is-invalid");
+  } else { passwordInput.classList.remove("is-invalid");
+  passwordInput.classList.add("is-valid"); } //repeat password confirmation let
+  msg = ""; if (password != repeatPassword) { msg = "Password needs to match"; }
+  if (!repeatPassword) { msg = "Please re-enter the password"; } if (msg) {
+  repeatPasswordError.textContent = msg; repeatPasswordError.style.color =
+  "red"; repeatPasswordInput.classList.add("is-invalid"); return; } else {
+  repeatPasswordInput.classList.remove("is-invalid");
+  repeatPasswordInput.classList.add("is-valid"); } } if (data.user) {
+  location.assign("/"); } } catch (err) { console.log(err); } });
+</script>
